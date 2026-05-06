@@ -40,8 +40,7 @@
 		"network",
 		"bluetooth",
 		"custom/update",
-		"custom/right_div#5",
-		"hyprland/language"
+		"custom/right_div#5"
 	],
 	"modules-right": [
 		"custom/left_div#9",
