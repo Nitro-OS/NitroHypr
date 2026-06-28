@@ -8,7 +8,7 @@
 		// "interval":
 		// "restart-interval":
 		// "signal":
-		"format": "󰣇",
+		"format": "<span>&#xe800;</span>",
 		// "format-icons":
 		// "rotate":
 		// "min-length":
