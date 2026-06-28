@@ -11,16 +11,17 @@
 @import "styles/modules-right.css";
 @import "styles/states.css";
 
-.module {
-	margin-bottom: -1px;
-}
+/* .module { */
+/* 	margin-bottom: -1px; */
+/* } */
 
-#waybar {
-	background-color: @outline;
-}
+/* #waybar { */
+/* 	background-color: @outline; */
+/* } */
+
 #waybar > box {
-	margin: 4px;
-	background-color: @main-bg;
+	margin: 8px 4px 0;
+	/* background-color: @main-bg; */
 }
 
 button {
