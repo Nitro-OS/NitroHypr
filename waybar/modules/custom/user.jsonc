@@ -13,7 +13,7 @@
     // "rotate":
     "min-length": 4,
     "max-length": 4,
-    "on-click": "~/.config/rofi/applets/bin/apps.sh",
+    "on-click": "~/.config/rofi/user/apps.sh",
     // "align":
     // "justify":
     // "on-click":
