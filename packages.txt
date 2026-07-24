@@ -56,3 +56,5 @@ eza
 bat
 fzf
 zoxide
+btop
+nvtop
