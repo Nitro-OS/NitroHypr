@@ -6,6 +6,7 @@ rofi
 mako
 
 ghostty
+alacritty
 fastfetch
 
 hyprpaper
@@ -13,6 +14,8 @@ hyprlock
 hypridle
 hyprpicker
 hyprsunset
+waypaper
+swaybg
 
 grim
 slurp
@@ -23,6 +26,9 @@ cliphist
 
 networkmanager
 network-manager-applet
+bluez
+bluez-utils
+pacman-contrib
 
 pipewire
 pipewire-pulse
@@ -36,6 +42,11 @@ udiskie
 
 ttf-jetbrains-mono-nerd
 otf-font-awesome
+noto-fonts-emoji
+ttf-fira-code
+ttf-icomoon-feather
+neovim
+lazygit
 
 starship
 zsh
