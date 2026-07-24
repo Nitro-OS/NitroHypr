@@ -41,11 +41,9 @@ if gum confirm "Do you want to apply the updated configurations to ~/.config/?";
     for config in "${CONFIGS[@]}"; do
         if [ -d "$config" ]; then
             dest="$HOME/.config/$config"
-            timestamp=$(date +%Y%m%d_%H%M%S)
             
             if [ -d "$dest" ] || [ -f "$dest" ]; then
-                gum style --foreground 245 "Backing up existing $dest to ${dest}.bak.${timestamp}..."
-                mv "$dest" "${dest}.bak.${timestamp}"
+                rm -rf "$dest"
             fi
             
             gum style --foreground 75 "Updating configuration: $config -> $dest"
