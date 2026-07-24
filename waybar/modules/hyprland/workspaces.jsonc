@@ -9,7 +9,7 @@
 			"default": ""
 		},
 		"persistent-workspaces": {
-			"*": 5
+			"*": 6
 		},
 		// "persistent-only":
 		// "show-special":
