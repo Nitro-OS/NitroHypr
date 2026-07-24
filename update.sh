@@ -4,8 +4,13 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR" || exit 1
 
 if ! command -v gum &> /dev/null; then
-    echo "gum could not be found, install gum to run update."
-    exit 1
+    echo "gum could not be found, installing it first..."
+    if command -v pacman &> /dev/null; then
+        sudo pacman -S --needed --noconfirm gum
+    else
+        echo "Error: gum is required but not installed. Please install gum first."
+        exit 1
+    fi
 fi
 
 LOGO="
