@@ -47,12 +47,12 @@ if gum confirm "Do you want to apply the updated configurations to ~/.config/?";
         if [ -d "$config" ]; then
             dest="$HOME/.config/$config"
             
-            if [ -d "$dest" ] || [ -f "$dest" ]; then
-                rm -rf "$dest"
-            fi
-            
             gum style --foreground 75 "Updating configuration: $config -> $dest"
-            cp -r "$config" "$HOME/.config/"
+            if [ -f "$dest" ] && [ ! -d "$dest" ]; then
+                rm -f "$dest"
+            fi
+            mkdir -p "$dest"
+            cp -rf "$config"/. "$dest/"
         fi
     done
     

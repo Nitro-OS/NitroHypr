@@ -104,12 +104,12 @@ for config in "${CONFIGS[@]}"; do
     if [ -d "$config" ]; then
         dest="$HOME/.config/$config"
         
-        if [ -d "$dest" ] || [ -f "$dest" ]; then
-            rm -rf "$dest"
-        fi
-        
         gum style --foreground 75 "Installing configuration: $config -> $dest"
-        cp -r "$config" "$HOME/.config/"
+        if [ -f "$dest" ] && [ ! -d "$dest" ]; then
+            rm -f "$dest"
+        fi
+        mkdir -p "$dest"
+        cp -rf "$config"/. "$dest/"
     else
         gum style --foreground 214 "Configuration folder $config not found in repository, skipping."
     fi
@@ -117,11 +117,21 @@ done
 
 if gum confirm "Do you want to install NitroVim configuration?"; then
     dest="$HOME/.config/nvim"
-    if [ -d "$dest" ] || [ -f "$dest" ]; then
-        rm -rf "$dest"
+    if [ -d "$dest/.git" ]; then
+        gum style --foreground 75 "Updating existing NitroVim configuration..."
+        git -C "$dest" pull
+    else
+        if [ -d "$dest" ] || [ -f "$dest" ]; then
+            if gum confirm "Existing $dest is not a Git repository. Overwrite (requires deleting it first)?"; then
+                rm -rf "$dest"
+                gum style --foreground 75 "Cloning NitroVim configuration..."
+                git clone https://github.com/NitroVim/NitroVim "$dest"
+            fi
+        else
+            gum style --foreground 75 "Cloning NitroVim configuration..."
+            git clone https://github.com/NitroVim/NitroVim "$dest"
+        fi
     fi
-    gum style --foreground 75 "Cloning NitroVim configuration..."
-    git clone https://github.com/NitroVim/NitroVim "$dest"
 fi
 
 if [ -d "fonts" ]; then
