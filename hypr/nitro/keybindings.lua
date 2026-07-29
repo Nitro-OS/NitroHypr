@@ -12,7 +12,7 @@ local browser          = "/opt/zen-browser-bin/zen-bin"
 local messenger        = "Telegram"
 local camera           = "io.github.cosmic_utils.camera"
 local obsidian         = "md.obsidian.Obsidian"
-local wallpaperManager = "waypaper"
+local wallpaperManager = "~/.config/rofi/wallpaper/wallpaper.sh"
 
 local powermenu        = "~/.config/rofi/powermenu/powermenu.sh"
 local clipboard        = "~/.config/rofi/clipboard/clipboard.sh"
@@ -42,7 +42,7 @@ hl.bind(mainMod .. " + Space", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"))
 hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("hyprlock"))
-hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen())
+hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen_state({ client = -1, internal = 1 }))
 
 -- Screenshots
 hl.bind(mainMod .. " + SHIFT + X", hl.dsp.exec_cmd("hyprshot -m region"))
