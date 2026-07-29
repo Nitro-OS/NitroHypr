@@ -7,6 +7,7 @@
 /*****----- Configuration -----*****/
 configuration {
     show-icons:                 false;
+    case-sensitive:             false;
 }
 
 /*****----- Global Properties -----*****/

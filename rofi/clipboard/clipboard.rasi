@@ -6,6 +6,7 @@
 
 configuration {
     show-icons: false;
+    case-sensitive: false;
 }
 
 @import "shared/colors.rasi"
