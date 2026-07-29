@@ -13,7 +13,7 @@ term_cmd='alacritty'
 file_cmd='thunar'
 text_cmd='geany'
 web_cmd='firefox'
-music_cmd='alacritty -e ncmpcpp'
+music_cmd='alacritty -e termusic'
 setting_cmd='xfce4-settings-manager'
 
 layout=$(grep 'USE_ICON' "$theme" 2>/dev/null | cut -d'=' -f2)
@@ -40,6 +40,7 @@ rofi_cmd() {
 		-theme-str "listview { columns: $list_col; lines: $list_row; }" \
 		-theme-str 'textbox-prompt-colon { str: ""; }' \
 		-dmenu \
+		-i \
 		-p "$prompt" \
 		-mesg "$mesg" \
 		-markup-rows
