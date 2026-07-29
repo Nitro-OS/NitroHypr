@@ -42,8 +42,6 @@ Keep your configuration files and package list updated with the latest releases:
 ```
 This pulls the latest commits, updates files in `~/.config`, and optionally updates your system packages.
 
----
-
 ## Uninstallation
 
 If you wish to uninstall NitroHypr and revert changes:
