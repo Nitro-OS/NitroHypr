@@ -11,8 +11,7 @@ hyprlock
 hypridle
 hyprpicker
 hyprsunset
-waypaper
-swaybg
+awww
 grim
 slurp
 satty
