@@ -16,8 +16,6 @@ NitroHypr is a modern, premium, and fully-featured Hyprland configuration suite 
 - **Fonts**: Pre-configured high-quality Nerd Fonts.
 - **Optional Editor**: Integrated with NitroVim for Neovim developers.
 
----
-
 ## Installation
 
 To install NitroHypr and its dependencies, clone the repository and run the installation script:
@@ -34,8 +32,6 @@ During installation:
 2. Choose which packages to install.
 3. Choose whether to install the custom NitroVim configuration.
 4. Log out of your current session, select **Hyprland** (or **Hyprland (UWSM)**) in your display manager (GDM, SDDM, etc.), and log in.
-
----
 
 ## Updating
 
