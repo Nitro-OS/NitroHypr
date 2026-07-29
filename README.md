@@ -21,7 +21,7 @@ NitroHypr is a modern, premium, and fully-featured Hyprland configuration suite 
 To install NitroHypr and its dependencies, clone the repository and run the installation script:
 
 ```bash
-git clone https://github.com/Nitro-OS/NitroHypr.git
+git clone https://github.com/Nitro-OS/NitroHypr/NitroHypr.git
 cd NitroHypr
 chmod +x install.sh uninstall.sh update.sh
 ./install.sh
