@@ -21,14 +21,14 @@ yes=" Yes"
 no=" No"
 
 rofi_cmd() {
-    rofi -dmenu \
+    rofi -dmenu -i \
         -p "$host" \
         -mesg "Uptime: $uptime" \
         -theme "$dir/$theme.rasi"
 }
 
 confirm_cmd() {
-    rofi -dmenu \
+    rofi -dmenu -i \
         -p "Confirmation" \
         -mesg "Are you sure?" \
         -theme "$dir/$theme.rasi" \

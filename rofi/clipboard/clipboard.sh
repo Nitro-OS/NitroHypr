@@ -6,7 +6,7 @@
 # Github : @Nitro-OS
 
 cliphist list \
-    | rofi -dmenu \
+    | rofi -dmenu -i \
         -theme ~/.config/rofi/clipboard/clipboard.rasi \
         -p "󰅌 " \
     | cliphist decode \
