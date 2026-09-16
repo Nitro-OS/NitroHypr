@@ -24,7 +24,7 @@ To install NitroHypr and its dependencies, clone the repository and run the inst
 ```bash
 git clone https://github.com/Nitro-OS/NitroHypr.git
 cd NitroHypr
-chmod +x install.sh uninstall.sh update.sh
+chmod +x install.sh uninstall.sh update.sh sync.sh
 ./install.sh
 ```
 
@@ -33,6 +33,15 @@ During installation:
 2. Choose which packages to install.
 3. Choose whether to install the custom NitroVim configuration.
 4. Log out of your current session, select **Hyprland** (or **Hyprland (UWSM)**) in your display manager (GDM, SDDM, etc.), and log in.
+
+## Syncing (System → Repo)
+
+To sync your active configurations from the system (`~/.config/`, `~/.vimrc`, fonts) into the repository:
+
+```bash
+./sync.sh
+```
+This copies your active configurations from `~/.config/`, `~/.vimrc`, and fonts directly into the repository.
 
 ## Updating
 
