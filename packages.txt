@@ -11,6 +11,7 @@ hyprlock
 hypridle
 hyprpicker
 hyprsunset
+hyprshot
 awww
 grim
 slurp
