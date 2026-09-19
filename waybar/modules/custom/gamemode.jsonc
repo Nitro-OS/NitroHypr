@@ -1,0 +1,16 @@
+{
+  "custom/gamemode": {
+    "format": "{icon} {text}",
+    "format-icons": {
+      "default": "󰊴",
+      "off": "󰊴",
+      "on": "󰊴"
+    },
+    "exec": "~/.config/waybar/scripts/gamemode-status.sh",
+    "on-click": "~/.config/hypr/scripts/gamemode.sh",
+    "signal": 8,
+    "interval": 2,
+    "return-type": "json",
+    "tooltip": true
+  }
+}
