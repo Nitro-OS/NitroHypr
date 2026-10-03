@@ -23,6 +23,10 @@ local tools            = "~/.config/rofi/tools/tools.sh"
 
 local logout           = "command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch exit"
 
+local network          = "alacritty -e ~/.config/waybar/scripts/network"
+local bluetooth        = "alacritty -e ~/.config/waybar/scripts/bluetooth"
+local systemUpdate     = "alacritty -e ~/.config/waybar/scripts/update"
+
 -- Keybindings
 local mainMod          = "SUPER"
 
@@ -63,6 +67,11 @@ hl.bind(mainMod .. " + left", hl.dsp.focus({ direction = "left" }))
 hl.bind(mainMod .. " + right", hl.dsp.focus({ direction = "right" }))
 hl.bind(mainMod .. " + up", hl.dsp.focus({ direction = "up" }))
 hl.bind(mainMod .. " + down", hl.dsp.focus({ direction = "down" }))
+
+-- Network / Bluetooth / Sytem Update
+hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd(bluetooth));
+hl.bind(mainMod .. " + SHIFT + N", hl.dsp.exec_cmd(network));
+hl.bind(mainMod .. " + SHIFT + U", hl.dsp.exec_cmd(systemUpdate));
 
 -- Workspaces
 for i = 1, 10 do
