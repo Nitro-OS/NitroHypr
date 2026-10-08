@@ -21,8 +21,6 @@ local helpMenu         = "~/.config/rofi/help/help.sh"
 local gamemode         = "~/.config/hypr/scripts/gamemode.sh"
 local tools            = "~/.config/rofi/tools/tools.sh"
 
-local logout           = "command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch exit"
-
 local network          = "alacritty -e ~/.config/waybar/scripts/network"
 local bluetooth        = "alacritty -e ~/.config/waybar/scripts/bluetooth"
 local systemUpdate     = "alacritty -e ~/.config/waybar/scripts/update"
@@ -41,7 +39,6 @@ hl.bind(mainMod .. " + I", hl.dsp.exec_cmd("thunderbird"))
 
 -- Window management
 hl.bind(mainMod .. " + Q", hl.dsp.window.close())
-hl.bind(mainMod .. " + M", hl.dsp.exec_cmd(logout))
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + Space", hl.dsp.exec_cmd(menu))
@@ -72,6 +69,9 @@ hl.bind(mainMod .. " + down", hl.dsp.focus({ direction = "down" }))
 hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd(bluetooth));
 hl.bind(mainMod .. " + SHIFT + N", hl.dsp.exec_cmd(network));
 hl.bind(mainMod .. " + SHIFT + U", hl.dsp.exec_cmd(systemUpdate));
+
+-- System
+hl.bind(mainMod .. " + SHIFT + L", hl.dsp.exit())
 
 -- Workspaces
 for i = 1, 10 do
