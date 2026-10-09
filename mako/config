@@ -18,3 +18,6 @@ margin=12,12,0,0
 font=JetBrainsMono Nerd Font 10
 
 default-timeout=2500
+
+[mode=dnd]
+invisible=true
