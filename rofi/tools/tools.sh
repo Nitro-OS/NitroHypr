@@ -5,6 +5,75 @@ theme="$SCRIPT_DIR/tools-style.rasi"
 
 selected_row=0
 
+cpu_governors=(/sys/devices/system/cpu/cpu*/cpufreq/scaling_governor)
+
+get_battery_profile() {
+    if command -v powerprofilesctl >/dev/null 2>&1; then
+        powerprofilesctl get 2>/dev/null
+        return
+    fi
+
+    if [ "${#cpu_governors[@]}" -eq 0 ] || [ ! -e "${cpu_governors[0]}" ]; then
+        return 1
+    fi
+
+    local governor
+    governor=$(cat "${cpu_governors[0]}" 2>/dev/null) || return 1
+    if [ "$governor" = "powersave" ]; then
+        printf '%s\n' "power-saver"
+    else
+        printf '%s\n' "balanced"
+    fi
+}
+
+set_battery_profile() {
+    local profile="$1"
+    local governor
+    local failed=0
+
+    if command -v powerprofilesctl >/dev/null 2>&1; then
+        powerprofilesctl set "$profile"
+        return $?
+    fi
+
+    case "$profile" in
+        power-saver) governor="powersave" ;;
+        balanced) governor="performance" ;;
+        *) return 1 ;;
+    esac
+
+    if [ "${#cpu_governors[@]}" -eq 0 ]; then
+        return 1
+    fi
+
+    if [ ! -w "${cpu_governors[0]}" ]; then
+        local privileged_runner=()
+        if command -v sudo >/dev/null 2>&1 && sudo -n true 2>/dev/null; then
+            privileged_runner=(sudo -n)
+        elif command -v pkexec >/dev/null 2>&1; then
+            privileged_runner=(pkexec)
+        else
+            return 1
+        fi
+        "${privileged_runner[@]}" /bin/sh -c '
+            governor="$1"
+            shift
+            for cpu_governor do
+                printf "%s\n" "$governor" > "$cpu_governor" || exit 1
+            done
+        ' battery-saver "$governor" "${cpu_governors[@]}" >/dev/null
+        return $?
+    fi
+
+    for cpu_governor in "${cpu_governors[@]}"; do
+        if ! printf '%s\n' "$governor" > "$cpu_governor"; then
+            failed=1
+        fi
+    done
+
+    return "$failed"
+}
+
 while true; do
     temp=$(hyprctl hyprsunset temperature 2>/dev/null)
     if [[ -n "$temp" && "$temp" =~ ^[0-9]+$ && "$temp" -lt 6000 ]]; then
@@ -33,6 +102,16 @@ while true; do
         dnd_icon="󰂚"
     fi
 
+    power_profile=$(get_battery_profile)
+    if [ -z "$power_profile" ]; then
+        battery_badge="[ N/A ]"
+    elif [ "$power_profile" = "power-saver" ]; then
+        battery_badge="[ ON ]"
+    else
+        battery_badge="[ OFF ]"
+    fi
+    battery_icon="󰁹"
+
     clip_badge="[ Open ]"
     clip_icon="󰅌"
     color_badge="[ Pick ]"
@@ -45,15 +124,17 @@ while true; do
     opt_night=$(printf "%-26s %s" "$night_icon  Night Mode" "$night_badge")
     opt_game=$(printf "%-26s %s" "$game_icon  Game Mode" "$game_badge")
     opt_dnd=$(printf "%-26s %s" "$dnd_icon  Do Not Disturb" "$dnd_badge")
+    opt_battery=$(printf "%-26s %s" "$battery_icon  Battery Saver" "$battery_badge")
     opt_clip=$(printf "%-26s %s" "$clip_icon  Clipboard History" "$clip_badge")
     opt_color=$(printf "%-26s %s" "$color_icon  Color Picker" "$color_badge")
     opt_snip=$(printf "%-26s %s" "$snip_icon  Area Screenshot" "$snip_badge")
     opt_full=$(printf "%-26s %s" "$full_icon  Full Screenshot" "$full_badge")
 
-    chosen=$(printf "%s\n%s\n%s\n%s\n%s\n%s\n%s\n" \
+    chosen=$(printf "%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n" \
         "$opt_night" \
         "$opt_game" \
         "$opt_dnd" \
+        "$opt_battery" \
         "$opt_clip" \
         "$opt_color" \
         "$opt_snip" \
@@ -62,6 +143,7 @@ while true; do
         -dmenu \
         -i \
         -selected-row "$selected_row" \
+        -format i \
         -p "Quick Tools" \
         -markup-rows)
 
@@ -72,7 +154,7 @@ while true; do
     fi
 
     case "$chosen" in
-        *"Night Mode"*)
+        0)
             selected_row=0
             if [ -x "$SCRIPT_DIR/hyprsunset-toggle.sh" ]; then
                 "$SCRIPT_DIR/hyprsunset-toggle.sh"
@@ -82,22 +164,41 @@ while true; do
                 hyprctl hyprsunset temperature 4500
             fi
             ;;
-        *"Game Mode"*)
+        1)
             selected_row=1
             if [ -x "$HOME/.config/hypr/scripts/gamemode.sh" ]; then
                 "$HOME/.config/hypr/scripts/gamemode.sh"
             fi
             ;;
-        *"Do Not Disturb"*)
+        2)
             selected_row=2
-            makoctl mode -t dnd
-            if makoctl mode 2>/dev/null | grep -q "dnd"; then
+            if ! makoctl mode -t dnd; then
+                notify-send "Do Not Disturb" "Failed to change notification mode" -u critical 2>/dev/null
+            elif makoctl mode 2>/dev/null | grep -qw "dnd"; then
                 notify-send "Do Not Disturb" "Enabled (Notifications muted)" -u low 2>/dev/null
             else
                 notify-send "Do Not Disturb" "Disabled (Notifications active)" -u low 2>/dev/null
             fi
             ;;
-        *"Clipboard History"*)
+        3)
+            selected_row=3
+            if [ -z "$power_profile" ]; then
+                notify-send "Battery Saver" "No supported power backend is available" -u critical 2>/dev/null
+            elif [ "$power_profile" = "power-saver" ]; then
+                if ! set_battery_profile balanced; then
+                    notify-send "Battery Saver" "Authorization unavailable. Install power-profiles-daemon or configure a polkit agent." -u critical 2>/dev/null
+                else
+                    notify-send "Battery Saver" "Disabled" -u low 2>/dev/null
+                fi
+            else
+                if ! set_battery_profile power-saver; then
+                    notify-send "Battery Saver" "Authorization unavailable. Install power-profiles-daemon or configure a polkit agent." -u critical 2>/dev/null
+                else
+                    notify-send "Battery Saver" "Enabled" -u low 2>/dev/null
+                fi
+            fi
+            ;;
+        4)
             (
                 sleep 0.1
                 if [ -x "$HOME/.config/rofi/clipboard/clipboard.sh" ]; then
@@ -108,7 +209,7 @@ while true; do
             ) &
             break
             ;;
-        *"Color Picker"*)
+        5)
             (
                 sleep 0.2
                 color=$(hyprpicker -a 2>/dev/null)
@@ -118,7 +219,7 @@ while true; do
             ) &
             break
             ;;
-        *"Area Screenshot"*)
+        6)
             (
                 sleep 0.2
                 mkdir -p "$HOME/Pictures/Screenshots"
@@ -131,7 +232,7 @@ while true; do
             ) &
             break
             ;;
-        *"Full Screenshot"*)
+        7)
             (
                 sleep 0.3
                 mkdir -p "$HOME/Pictures/Screenshots"
